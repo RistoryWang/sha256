@@ -1,10 +1,12 @@
+package com.ristory;
+
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * SHA256 摘要算法工具类
- * @author Administrator
+ * SHA256 手机号批量加密
+ * @author Ristory
  *
  */
 public class SHA256 {
@@ -75,9 +77,9 @@ public class SHA256 {
         try
         {
             //使用BufferedReader和BufferedWriter进行文件复制（操作的是字符,以行为单位读入字符）
-            FileReader fr=new FileReader("/Users/ristory/Desktop/sha256/in.txt");
+            FileReader fr=new FileReader("/home/deployer/updo-master/freedom/upload/in.txt");
             BufferedReader br=new BufferedReader(fr);
-            FileWriter fw=new FileWriter("/Users/ristory/Desktop/sha256/out.txt");
+            FileWriter fw=new FileWriter("/home/deployer/updo-master/freedom/upload/out.txt");
             BufferedWriter bw=new BufferedWriter(fw);
 
             String s=br.readLine();
@@ -102,9 +104,12 @@ public class SHA256 {
 
 
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]) throws InterruptedException {
+        do {
+            Write();
+            Thread.sleep(5000);
+        }while(true);
 
-        Write();
         //BufferedReaderDemo("/Users/ristory/Desktop/sha256/in.txt");
     }
 
