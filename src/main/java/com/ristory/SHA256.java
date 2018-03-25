@@ -1,5 +1,7 @@
 package com.ristory;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -10,6 +12,16 @@ import java.security.NoSuchAlgorithmException;
  *
  */
 public class SHA256 {
+
+    public static String fileMD5_LAST = "";
+    public static String fileMD5_NOW = "";
+    public static String inPath = "/home/deployer/updo-master/freedom/upload/in.txt";
+    public static String outPath = "/home/deployer/updo-master/freedom/upload/out.txt";
+//    public static String inPath = "/Users/ristory/Desktop/sha256/in.txt";
+//    public static String outPath = "/Users/ristory/Desktop/sha256/out.txt";
+
+
+
     /**
      * 利用java原生的摘要实现SHA256加密
      * @param str 加密后的报文
@@ -77,9 +89,12 @@ public class SHA256 {
         try
         {
             //使用BufferedReader和BufferedWriter进行文件复制（操作的是字符,以行为单位读入字符）
-            FileReader fr=new FileReader("/home/deployer/updo-master/freedom/upload/in.txt");
+
+
+
+            FileReader fr=new FileReader(inPath);
             BufferedReader br=new BufferedReader(fr);
-            FileWriter fw=new FileWriter("/home/deployer/updo-master/freedom/upload/out.txt");
+            FileWriter fw=new FileWriter(outPath);
             BufferedWriter bw=new BufferedWriter(fw);
 
             String s=br.readLine();
@@ -104,13 +119,39 @@ public class SHA256 {
 
 
 
-    public static void main(String args[]) throws InterruptedException {
+    public static void main(String args[]){
         do {
-            Write();
-            Thread.sleep(5000);
+            try{
+                sleep(10*1000);
+                FileInputStream fis = new FileInputStream(inPath);
+                fileMD5_NOW = DigestUtils.md5Hex(fis);
+                fis.close();
+
+                File file = new File(outPath);
+                if(file.exists()&&fileMD5_NOW.equals(fileMD5_LAST)){
+                    continue;
+                }else {
+                    fileMD5_LAST = fileMD5_NOW;
+                    Write();
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
         }while(true);
 
         //BufferedReaderDemo("/Users/ristory/Desktop/sha256/in.txt");
     }
+
+    public static void sleep(int millis){
+        try{
+            Thread.sleep(millis);
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
+
+
+    }
+
 
 }
